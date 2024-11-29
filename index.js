@@ -20,19 +20,20 @@ if (key.length !== 32 || iv.length !== 32) {
 
 const cipher = new Rijndael(key, 'cbc');
 
+app.use(express.raw({ type: 'application/json' }));
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-app.get("/", (req, res) => {
-    const { encryptedText } = req.query;
+app.post("/", (req, res) => {
+    const encryptedText = req.body;
 
     if (!encryptedText) {
-        return res.status(400).send('Missing required parameter: encryptedText');
+        return res.status(400).send('Missing body');
     }
 
     try {
-        const buf = Buffer.from(encryptedText, 'base64');
+        const buf = Buffer.from(encryptedText.toString(), 'base64');
         
         if (buf.length % 32 !== 0) {
             return res.status(400).send('Invalid encryptedText format');
