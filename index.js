@@ -25,8 +25,8 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-app.post("/", (req, res) => {
-    const encryptedText = req.body;
+app.get("/", (req, res) => {
+    const { encryptedText } = req.query;
 
     if (!encryptedText) {
         return res.status(400).send('Missing body');
